@@ -70,8 +70,22 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-    'post',            
+    'post',
+    'search',
+    'chat',            
 ]
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'petshop',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Tushar18',
+#         'HOST': 'localhost',  
+#         'PORT': '5432',       
+#     }
+# }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
