@@ -1,6 +1,7 @@
 <template>
 
   <!-- HERO -->
+   <div>
   <section class="bg-white dark:bg-gray-800 mx-2 my-2 mb-2">
     <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div class="mr-auto place-self-center lg:col-span-7">
@@ -19,7 +20,6 @@
         </div>                
     </div>
 </section>
-
 <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
         <div class="main-left col-span-1">
             <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
@@ -94,12 +94,15 @@
             </div>
         </div>
 
-        <div class="main-right col-span-1 space-y-4">
+        <!-- <div class="main-right col-span-1 space-y-4">
             <PeopleYouMayKnow />
 
             
-        </div>
+        </div> -->
     </div>
+</div>
+
+     
 
   
 </template>

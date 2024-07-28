@@ -5,6 +5,7 @@ import SignupView from '../views/SignupView.vue'
 import LoginView from '../views/LoginView.vue'
 import MessagesView from '../views/MessagesView.vue'
 import SearchView from '../views/SearchView.vue'
+import FrontView from '../views/FrontView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,11 @@ const router = createRouter({
       path: '/messages',
       name: 'messages',
       component: MessagesView
+    },
+    {
+      path: '/FrontView',
+      name: 'FrontView',
+      component: FrontView
     },
     {
       path: '/search',
