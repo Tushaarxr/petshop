@@ -48,7 +48,7 @@
 
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
     <div class="main-center col-span-3 space-y-4">
-      <div class="bg-white border border-gray-200 rounded-lg">
+      <!-- <div class="bg-white border border-gray-200 rounded-lg">
         <form v-on:submit.prevent="submitForm" method="post">
           <div class="p-4">
             <textarea
@@ -72,7 +72,7 @@
             </button>
           </div>
         </form>
-      </div>
+      </div> -->
 
       <div
         class="p-4 bg-white border border-gray-200 rounded-lg"
@@ -95,6 +95,7 @@
 import axios from "axios";
 import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue";
 import FeedItem from "../components/FeedItem.vue";
+import Trends from "../components/Trends.vue"
 
 export default {
   name: "FeedView",
@@ -102,6 +103,7 @@ export default {
   components: {
     PeopleYouMayKnow,
     FeedItem,
+    Trends
   },
 
   data() {

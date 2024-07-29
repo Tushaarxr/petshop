@@ -1,7 +1,7 @@
 <template>
     <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center space-x-6">
-            <img src="../assets/dogavatar.jpg" class="w-[40px] rounded-full">
+            <img :src="post.created_by.get_avatar" class="w-[40px] rounded-full">
             
             <p>
                 <strong>
@@ -12,6 +12,10 @@
 
         <p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
     </div>
+
+    <template v-if="post.attachments.length">
+        <img v-for="image in post.attachments" v-bind:key="image.id" :src="image.get_image" class="w-full mb-4 rounded-xl">
+    </template>
 
     <p>{{ post.body }}</p>
 

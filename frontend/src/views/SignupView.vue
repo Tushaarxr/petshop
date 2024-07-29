@@ -10,7 +10,7 @@
                 </p>
 
                 <p class="font-bold">
-                    Already have an account? <RouterLink :to="{ name: 'login' }" class="underline">Click here</RouterLink> to log in!
+                    Already have an account? <RouterLink :to="{'name': 'login'}" class="underline">Click here</RouterLink> to log in!
                 </p>
             </div>
         </div>
@@ -103,25 +103,27 @@ export default {
                 axios
                     .post('/api/signup/', this.form)
                     .then(response => {
-                        console.log('Server response:', response) // Log the response
-
                         if (response.data.message === 'success') {
-                            this.toastStore.showToast(5000, 'The user is registered. Please log in', 'bg-emerald-500')
+                            this.toastStore.showToast(5000, 'The user is registered. Please activate your account by clicking your email link.', 'bg-emerald-500')
 
                             this.form.email = ''
                             this.form.name = ''
                             this.form.password1 = ''
                             this.form.password2 = ''
                         } else {
+                            const data = JSON.parse(response.data.message)
+                            for (const key in data){
+                                this.errors.push(data[key][0].message)
+                            }
+
                             this.toastStore.showToast(5000, 'Something went wrong. Please try again', 'bg-red-300')
                         }
                     })
                     .catch(error => {
-                        console.error('Error:', error)
-                        this.toastStore.showToast(5000, 'An error occurred. Please try again', 'bg-red-300')
+                        console.log('error', error)
                     })
             }
         }
     }
 }
-</script>
+</script>++

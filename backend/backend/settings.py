@@ -15,6 +15,7 @@ SECRET_KEY = 'django-insecure-v*=4ctfyl&pe37%c8rs7oa4hoj3h_4w--q9nxw1j=ebd%91865
 DEBUG = True
 
 ALLOWED_HOSTS = []
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 # Application definition
@@ -72,7 +73,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'post',
     'search',
-    'chat',            
+    'chat',
+    'notification',            
 ]
 
 # DATABASES = {
@@ -165,6 +167,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
