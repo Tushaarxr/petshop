@@ -77,16 +77,19 @@ INSTALLED_APPS = [
     'notification',            
 ]
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'petshop',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Tushar18',
-#         'HOST': 'localhost',  
-#         'PORT': '5432',       
-#     }
-# }
+# postgreSQL
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'Tushar18',
+        'HOST': '',  # Set to empty string for localhost.
+        'PORT': '5432',  # Set to empty string for default.
+    }
+}
+
 
 
 MIDDLEWARE = [
@@ -124,12 +127,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation

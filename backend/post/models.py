@@ -39,6 +39,27 @@ class PostAttachment(models.Model):
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255,default='Lovely Pet')
+    description = models.TextField(blank=True, null=True)
+    contact_information = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=4000.00)
+    category = models.CharField(max_length=50, default='Cat')  # Change to CharField with default value
+
+    body = models.TextField(blank=True, null=True)
+    attachments = models.ManyToManyField('PostAttachment', blank=True)
+    likes = models.ManyToManyField('Like', blank=True)
+    likes_count = models.IntegerField(default=0)
+    comments = models.ManyToManyField('Comment', blank=True)
+    comments_count = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('-created_at',)
+    
+    def created_at_formatted(self):
+        return timesince(self.created_at)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     body = models.TextField(blank=True, null=True)
 
     attachments = models.ManyToManyField(PostAttachment, blank=True)

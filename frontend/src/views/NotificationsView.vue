@@ -9,7 +9,7 @@
             >
                 {{ notification.body }} 
 
-                <button class="underline" @click="readNotification(notification)">View Post</button>
+                <button class="underline" @click="readNotification(notification)">More Info..</button>
             </div>
 
             <div 

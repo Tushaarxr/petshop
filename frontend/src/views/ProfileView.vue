@@ -54,7 +54,13 @@
             >
                 <form v-on:submit.prevent="submitForm" method="post">
                     <div class="p-4">  
-                        <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you thinking about?"></textarea>
+                        <input v-model="title" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Title">
+                        <textarea v-model="description" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Description"></textarea>
+                        <input v-model="contact_information" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Contact Information">
+                        <input v-model="price" type="number" step="0.01" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Price">
+                        <input v-model="category" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Category">
+                        
+                        <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="What are you thinking about?"></textarea>
 
                         <div id="preview" v-if="url">
                             <img :src="url" class="w-[100px] mt-3 rounded-xl" />
@@ -88,20 +94,6 @@
         </div>
     </div>
 </template>
-
-<style>
-input[type="file"] {
-    display: none;
-}
-
-.custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-}
-</style>
-
 <script>
 import axios from 'axios'
 import PeopleYouMayKnow from '../components/PeopleYouMayKnow.vue'
@@ -137,6 +129,11 @@ export default {
             },
             body: '',
             url: null,
+            title: '',
+            description: '',
+            contact_information: '',
+            price: '',
+            category: ''
         }
     },
 
@@ -212,6 +209,11 @@ export default {
             let formData = new FormData()
             formData.append('image', this.$refs.file.files[0])
             formData.append('body', this.body)
+            formData.append('title', this.title)
+            formData.append('description', this.description)
+            formData.append('contact_information', this.contact_information)
+            formData.append('price', this.price)
+            formData.append('category', this.category)
 
             axios
                 .post('/api/posts/create/', formData, {
@@ -224,6 +226,11 @@ export default {
 
                     this.posts.unshift(response.data)
                     this.body = ''
+                    this.title = ''
+                    this.description = ''
+                    this.contact_information = ''
+                    this.price = ''
+                    this.category = ''
                     this.$refs.file.value = null
                     this.url = null
                     this.user.posts_count += 1

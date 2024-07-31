@@ -17,7 +17,15 @@
         <img v-for="image in post.attachments" v-bind:key="image.id" :src="image.get_image" class="w-full mb-4 rounded-xl">
     </template>
 
-    <p>{{ post.body }}</p>
+    <div class="ad-details p-4 bg-white rounded-lg">
+        <p><strong>Title:</strong> {{ post.title }}</p>
+        <p><strong>Description:</strong> {{ post.description }}</p>
+        <p><strong>Contact Information:</strong> {{ post.contact_information }}</p>
+        <p><strong>Price:</strong> {{ post.price }}</p>
+        <p><strong>Category:</strong> {{ post.category }}</p>
+    </div>
+
+    <p class="mt-4">{{ post.body }}</p>
 
     <div class="my-6 flex justify-between">
         <div class="flex space-x-6">
@@ -45,7 +53,6 @@
         </div>   
     </div>  
 </template>
-
 <script>
 import axios from 'axios'
 import { RouterLink } from 'vue-router'
@@ -59,13 +66,13 @@ export default {
             axios
                 .post(`/api/posts/${id}/like/`)
                 .then(response => {
-                if (response.data.message == "like created") {
-                    this.post.likes_count += 1;
-                }
-            })
+                    if (response.data.message == "like created") {
+                        this.post.likes_count += 1;
+                    }
+                })
                 .catch(error => {
-                console.log("error", error);
-            });
+                    console.log("error", error);
+                });
         }
     },
     components: { RouterLink }
