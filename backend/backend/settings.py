@@ -74,7 +74,8 @@ INSTALLED_APPS = [
     'post',
     'search',
     'chat',
-    'notification',            
+    'notification',   
+
 ]
 
 # postgreSQL
@@ -170,7 +171,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type

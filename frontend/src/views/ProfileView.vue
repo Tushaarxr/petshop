@@ -48,6 +48,7 @@
         </div>
 
         <div class="main-center col-span-2 space-y-4">
+         
             <div 
                 class="bg-white border border-gray-200 rounded-lg"
                 v-if="userStore.user.id === user.id"
@@ -59,8 +60,32 @@
                         <input v-model="contact_information" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Contact Information">
                         <input v-model="price" type="number" step="0.01" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Price">
                         <input v-model="category" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Category">
-                        
-                        <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="What are you thinking about?"></textarea>
+                        <input v-model="breed" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Breed">
+                        <input v-model="color" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Color">
+                        <input v-model="age" type="number" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Age (in months)">
+                        <select v-model="vaccinated" class="p-4 w-full bg-gray-100 rounded-lg mb-2">
+                            <option value="true">Vaccinated</option>
+                            <option value="false">Not Vaccinated</option>
+                        </select>
+                        <select v-model="gender" class="p-4 w-full bg-gray-100 rounded-lg mb-2">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <input v-model="weight" type="number" step="0.01" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Weight (in kg)">
+                        <select v-model="microchipped" class="p-4 w-full bg-gray-100 rounded-lg mb-2">
+                            <option value="true">Microchipped</option>
+                            <option value="false">Not Microchipped</option>
+                        </select>
+                        <select v-model="trained" class="p-4 w-full bg-gray-100 rounded-lg mb-2">
+                            <option value="true">Trained</option>
+                            <option value="false">Not Trained</option>
+                        </select>
+                        <select v-model="health_certificate" class="p-4 w-full bg-gray-100 rounded-lg mb-2">
+                            <option value="true">Health Certificate Available</option>
+                            <option value="false">No Health Certificate</option>
+                        </select>
+
+                        <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg mb-2" placeholder="Add Message"></textarea>
 
                         <div id="preview" v-if="url">
                             <img :src="url" class="w-[100px] mt-3 rounded-xl" />
@@ -94,6 +119,7 @@
         </div>
     </div>
 </template>
+
 <script>
 import axios from 'axios'
 import PeopleYouMayKnow from '../components/PeopleYouMayKnow.vue'
@@ -101,6 +127,7 @@ import Trends from '../components/Trends.vue'
 import FeedItem from '../components/FeedItem.vue'
 import { useUserStore } from '@/stores/user'
 import { useToastStore } from '@/stores/toast'
+import { RouterLink } from 'vue-router'
 
 export default {
     name: 'FeedView',
@@ -133,7 +160,16 @@ export default {
             description: '',
             contact_information: '',
             price: '',
-            category: ''
+            category: '',
+            breed: '',
+            color: '',
+            age: null,
+            vaccinated: '',
+            gender: '',
+            weight: null,
+            microchipped: '',
+            trained: '',
+            health_certificate: ''
         }
     },
 
@@ -158,17 +194,13 @@ export default {
         },
 
         sendDirectMessage() {
-            console.log('sendDirectMessage')
-
             axios
                 .get(`/api/chat/${this.$route.params.id}/get-or-create/`)
                 .then(response => {
-                    console.log(response.data)
-
                     this.$router.push('/chat')
                 })
                 .catch(error => {
-                    console.log('error', error)
+                    console.error('error', error)
                 })
         },
 
@@ -176,8 +208,6 @@ export default {
             axios
                 .post(`/api/friends/${this.$route.params.id}/request/`)
                 .then(response => {
-                    console.log('data', response.data)
-
                     if (response.data.message == 'request already sent') {
                         this.toastStore.showToast(5000, 'The request has already been sent!', 'bg-red-300')
                     } else {
@@ -185,7 +215,7 @@ export default {
                     }
                 })
                 .catch(error => {
-                    console.log('error', error)
+                    console.error('error', error)
                 })
         },
 
@@ -193,19 +223,15 @@ export default {
             axios
                 .get(`/api/posts/profile/${this.$route.params.id}/`)
                 .then(response => {
-                    console.log('data', response.data)
-
                     this.posts = response.data.posts
                     this.user = response.data.user
                 })
                 .catch(error => {
-                    console.log('error', error)
+                    console.error('error', error)
                 })
         },
 
         submitForm() {
-            console.log('submitForm', this.body)
-
             let formData = new FormData()
             formData.append('image', this.$refs.file.files[0])
             formData.append('body', this.body)
@@ -214,6 +240,15 @@ export default {
             formData.append('contact_information', this.contact_information)
             formData.append('price', this.price)
             formData.append('category', this.category)
+            formData.append('breed', this.breed)
+            formData.append('color', this.color)
+            formData.append('age', this.age)
+            formData.append('vaccinated', this.vaccinated)
+            formData.append('gender', this.gender)
+            formData.append('weight', this.weight)
+            formData.append('microchipped', this.microchipped)
+            formData.append('trained', this.trained)
+            formData.append('health_certificate', this.health_certificate)
 
             axios
                 .post('/api/posts/create/', formData, {
@@ -222,8 +257,6 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log('data', response.data)
-
                     this.posts.unshift(response.data)
                     this.body = ''
                     this.title = ''
@@ -231,20 +264,26 @@ export default {
                     this.contact_information = ''
                     this.price = ''
                     this.category = ''
+                    this.breed = ''
+                    this.color = ''
+                    this.age = null
+                    this.vaccinated = ''
+                    this.gender = ''
+                    this.weight = null
+                    this.microchipped = ''
+                    this.trained = ''
+                    this.health_certificate = ''
                     this.$refs.file.value = null
                     this.url = null
                     this.user.posts_count += 1
                 })
                 .catch(error => {
-                    console.log('error', error)
+                    console.error('error', error)
                 })
         },
 
         logout() {
-            console.log('Log out')
-
             this.userStore.removeToken()
-
             this.$router.push('/login')
         }
     }

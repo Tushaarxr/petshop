@@ -78,3 +78,5 @@ class FriendshipRequest(models.Model):
         User, related_name="created_friendshiprequests", on_delete=models.CASCADE
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=SENT)
+
+
