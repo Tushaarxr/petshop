@@ -13,6 +13,13 @@
         <p class="text-gray-700">{{ event.description }}</p>
         <p class="text-gray-500">{{ event.date }}</p>
         <p class="text-gray-500">{{ event.location }}</p>
+        <!-- Register button for each event -->
+        <button 
+          @click="registerForEvent(event.id)" 
+          class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-2"
+        >
+          Register
+        </button>
       </div>
     </div>
     <div v-else>
@@ -20,8 +27,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script>
 import axios from 'axios';

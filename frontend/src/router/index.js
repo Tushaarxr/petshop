@@ -14,6 +14,7 @@ import EditPasswordView from "../views/EditPasswordView.vue";
 import NotificationsView from "../views/NotificationsView.vue";
 import EventList from "../views/EventList.vue";
 import EventForm from "../views/EventForm.vue";
+import Bookmarked from "../views/Bookmarked.vue";
 
 
 
@@ -101,6 +102,11 @@ const router = createRouter({
       path: "/about",
       name: "about",
       component: () => import("../views/AboutView.vue"),
+    },
+    {
+      path: '/bookmarks',
+      name: 'bookmarked-posts',
+      component: Bookmarked
     },
 
   ],

@@ -131,3 +131,16 @@ class Event(models.Model):
     
     
  
+ 
+class Bookmark(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    post = models.ForeignKey('Post', related_name='bookmarks', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='bookmarks', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('post', 'user')
+        ordering = ('-created_at',)
+
+    def created_at_formatted(self):
+        return timesince(self.created_at)

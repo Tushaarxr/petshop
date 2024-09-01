@@ -14,4 +14,6 @@ urlpatterns = [
     path('trends/', api.get_trends, name='get_trends'),
     path('events/', api.event_list_create, name='event_list_create'),
     path('events/register/<uuid:event_id>/', api.event_register, name='event_register'),
+    path('<uuid:pk>/bookmark/', api.bookmark_post, name='post_bookmark'),  # New bookmark route
+    path('bookmarks/', api.bookmarked_posts, name='bookmarked_posts'),  # New route to view bookmarks
 ]

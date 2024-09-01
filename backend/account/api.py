@@ -145,8 +145,8 @@ def handle_request(request, pk, status):
 
 
 
-@api_view(['GET'])
-def my_friendship_suggestions(request):
-    serializer = UserSerializer(request.user.people_you_may_know.all(), many=True)
+# @api_view(['GET'])
+# def my_friendship_suggestions(request):
+#     serializer = UserSerializer(request.user.people_you_may_know.all(), many=True)
 
-    return JsonResponse(serializer.data, safe=False)
+#     return JsonResponse(serializer.data, safe=False)

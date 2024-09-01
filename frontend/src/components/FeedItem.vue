@@ -1,7 +1,7 @@
 <template>
     <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center space-x-6">
-            <img :src="post.created_by.get_avatar" class="w-[40px] rounded-full">
+            <img :src="post.created_by.get_avatar" class="w-[30px] rounded-full">
             
             <p>
                 <strong>
@@ -53,13 +53,7 @@
                 <RouterLink :to="{name: 'postview', params: {id: post.id}}" class="text-gray-500 text-xs">{{ post.comments_count }} comments</RouterLink>
             </div>
 
-            <div v-if="post.is_private" class="flex items-center space-x-2 text-gray-500 text-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                </svg>
-
-                <span>Is private</span>
-            </div>
+           
         </div>
         
         <div>
@@ -85,15 +79,17 @@
                 <span class="text-red-500 text-xs">Delete post</span>
             </div>
 
-            <div 
-                class="flex items-center space-x-2"
-                @click="reportPost"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-orange-500">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0l2.77-.693a9 9 0 016.208.682l.108.054a9 9 0 006.086.71l3.114-.732a48.524 48.524 0 01-.005-10.499l-3.11.732a9 9 0 01-6.085-.711l-.108-.054a9 9 0 00-6.208-.682L3 4.5M3 15V4.5" />
+       
+            <!-- Bookmark Icon -->
+            <div class="flex items-center space-x-2" @click="bookmarkPost(post.id)">
+                <svg v-if="post.is_bookmarked" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 text-yellow-500">
+                    <path d="M6 4v16l6-5.333L18 20V4z"/>
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5l7-3 7 3v16l-7-3-7 3V5z"/>
                 </svg>
 
-                <span class="text-orange-500 text-xs">Report post</span>
+                <span class="text-gray-500 text-xs">{{ post.is_bookmarked ? 'Bookmarked' : 'Bookmark' }}</span>
             </div>
         </div>
     </div>
@@ -135,6 +131,21 @@ export default {
                 .then(response => {
                     if (response.data.message == "like created") {
                         this.post.likes_count += 1;
+                    }
+                })
+                .catch(error => {
+                    console.log("error", error);
+                });
+        },
+
+        bookmarkPost(id) {
+            axios
+                .post(`/api/posts/${id}/bookmark/`)
+                .then(response => {
+                    if (response.data.message == "bookmark created") {
+                        this.post.is_bookmarked = true;
+                    } else if (response.data.message == "bookmark removed") {
+                        this.post.is_bookmarked = false;
                     }
                 })
                 .catch(error => {

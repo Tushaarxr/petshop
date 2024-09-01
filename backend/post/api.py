@@ -7,7 +7,7 @@ from account.models import User, FriendshipRequest
 from account.serializers import UserSerializer
 from notification.utils import create_notification
 from .forms import PostForm, AttachmentForm, EventForm,EventAttachmentForm
-from .models import Post, Like, Comment, Trend, Event
+from .models import Post, Like, Comment, Trend, Event,Bookmark
 from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer, TrendSerializer, EventSerializer
 
 
@@ -203,3 +203,31 @@ def event_register(request, event_id):
         event.save()
         return JsonResponse({'status': 'registered'}, status=status.HTTP_200_OK)
     return JsonResponse({'status': 'already registered'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+@api_view(['POST'])
+def bookmark_post(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    user = request.user
+    if user.is_authenticated:
+        bookmark, created = Bookmark.objects.get_or_create(post=post, user=user)
+        if created:
+            return Response({'message': 'Post bookmarked'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'message': 'Post already bookmarked'}, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def bookmarked_posts(request):
+    bookmarks = Bookmark.objects.filter(user=request.user)
+    posts = [bookmark.post for bookmark in bookmarks]
+    serializer = PostSerializer(posts, many=True)
+    return JsonResponse(serializer.data, safe=False)
