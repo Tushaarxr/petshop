@@ -37,7 +37,8 @@ def post_detail(request, pk):
     for user in request.user.friends.all():
         user_ids.append(user.id)
 
-    post = Post.objects.filter(Q(created_by_id__in=list(user_ids)) | Q(is_private=False)).get(pk=pk)
+    # Remove the is_private condition from the filter
+    post = Post.objects.filter(created_by_id__in=list(user_ids)).get(pk=pk)
 
     return JsonResponse({
         'post': PostDetailSerializer(post).data
@@ -231,3 +232,32 @@ def bookmarked_posts(request):
     posts = [bookmark.post for bookmark in bookmarks]
     serializer = PostSerializer(posts, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['PUT'])
+def post_edit(request, pk):
+    print(f"Request user: {request.user}")
+    try:
+        post = Post.objects.get(pk=pk)
+        if post.created_by != request.user:
+            return Response({'error': 'Not authorized to edit this post'}, status=status.HTTP_403_FORBIDDEN)
+    except Post.DoesNotExist:
+        return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    form = PostForm(request.data, instance=post)
+    attachment_form = AttachmentForm(request.data, request.FILES)
+
+    if attachment_form.is_valid():
+        attachment = attachment_form.save(commit=False)
+        attachment.created_by = request.user
+        attachment.save()
+        post.attachments.add(attachment)
+
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.save()
+
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+    else:
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)

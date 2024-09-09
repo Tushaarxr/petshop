@@ -37,30 +37,7 @@ class PostAttachment(models.Model):
             return ''
 
 
-# class Post(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     title = models.CharField(max_length=255, default='Lovely Pet')
-#     description = models.TextField(blank=True, null=True)
-#     contact_information = models.TextField(blank=True, null=True)
-#     price = models.DecimalField(max_digits=10, decimal_places=2, default=4000.00)
-#     category = models.CharField(max_length=50, default='Cat')
-#     body = models.TextField(blank=True, null=True)
-#     attachments = models.ManyToManyField('PostAttachment', blank=True)
-#     is_private = models.BooleanField(default=False)
 
-    
-#     likes = models.ManyToManyField('Like', blank=True)
-#     likes_count = models.IntegerField(default=0)
-#     comments = models.ManyToManyField('Comment', blank=True)
-#     comments_count = models.IntegerField(default=0)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     created_by = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
-
-#     class Meta:
-#         ordering = ('-created_at',)
-    
-#     def created_at_formatted(self):
-#         return timesince(self.created_at)
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -90,9 +67,17 @@ class Post(models.Model):
     comments_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        # Automatically update likes_count and comments_count when saving the post
+        self.likes_count = self.likes.count()
+        self.comments_count = self.comments.count()
+        super().save(*args, **kwargs)
+    
     class Meta:
-        ordering = ('-created_at',)
+        ordering = ('-updated_at', '-created_at',)  # Order posts by updated_at and created_at in descending order
+
     
     def created_at_formatted(self):
         return timesince(self.created_at)

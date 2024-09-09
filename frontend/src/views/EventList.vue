@@ -1,25 +1,27 @@
 <template>
-  <div class="max-w-4xl mx-auto p-6 bg-white rounded shadow-md">
+  <div class="max-w-7xl mx-auto p-8 bg-white rounded shadow-md">
     <h1 class="text-2xl font-bold mb-4">Events</h1>
     <div v-if="events.length">
-      <div v-for="event in events" :key="event.id" class="border-b border-gray-200 py-4">
-        <!-- Display event images if they exist -->
-        <div v-if="event.attachments.length">
-          <div v-for="attachment in event.attachments" :key="attachment.id" class="mb-4">
-            <img :src="attachment.image_url" alt="Event Image" class="w-full h-48 object-cover rounded">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div v-for="event in events" :key="event.id" class="border border-gray-200 p-4 rounded-lg shadow-sm bg-white">
+          <!-- Display event images if they exist -->
+          <div v-if="event.attachments.length">
+            <div v-for="attachment in event.attachments" :key="attachment.id" class="mb-6">
+              <img :src="attachment.image_url" alt="Event Image" class="w-full h-48 object-cover rounded">
+            </div>
           </div>
+          <h2 class="text-xl font-semibold mb-2">{{ event.title }}</h2>
+          <p class="text-gray-700 mb-2">{{ event.description }}</p>
+          <p class="text-gray-500 mb-2">{{ event.date }}</p>
+          <p class="text-gray-500 mb-4">{{ event.location }}</p>
+          <!-- Register button for each event -->
+          <button 
+            @click="registerForEvent(event.id)" 
+            class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 w-full"
+          >
+            Register
+          </button>
         </div>
-        <h2 class="text-xl font-semibold">{{ event.title }}</h2>
-        <p class="text-gray-700">{{ event.description }}</p>
-        <p class="text-gray-500">{{ event.date }}</p>
-        <p class="text-gray-500">{{ event.location }}</p>
-        <!-- Register button for each event -->
-        <button 
-          @click="registerForEvent(event.id)" 
-          class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-2"
-        >
-          Register
-        </button>
       </div>
     </div>
     <div v-else>
@@ -27,6 +29,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';

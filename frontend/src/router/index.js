@@ -15,6 +15,8 @@ import NotificationsView from "../views/NotificationsView.vue";
 import EventList from "../views/EventList.vue";
 import EventForm from "../views/EventForm.vue";
 import Bookmarked from "../views/Bookmarked.vue";
+import FeedForm from "../views/FeedForm.vue";
+import PostEdit from "../views/PostEdit.vue";
 
 
 
@@ -30,6 +32,11 @@ const router = createRouter({
       path: "/feed",
       name: "feed",
       component: FeedView,
+    },
+    {
+      path: "/feedform",
+      name: "FeedForm",
+      component: FeedForm,
     },
     {
       path: "/signup",
@@ -81,12 +88,13 @@ const router = createRouter({
       name: "postview",
       component: PostView,
     },
- 
     {
-      path: "/trends/:id",
-      name: "trendview",
-      component: TrendView,
+      path: "/:id/edit",
+      name: "postedit",
+      component: PostEdit,
     },
+ 
+  
     {
       path: '/events',
       name: 'EventList',

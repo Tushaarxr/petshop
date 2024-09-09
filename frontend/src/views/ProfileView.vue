@@ -1,25 +1,28 @@
 <template>
-  <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-    <div class="main-left col-span-1">
-      <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-        <img :src="user.get_avatar" class="mb-6 rounded-full" />
-
-        <p>
+  <div
+    class="max-w-7xl mx-auto p-6 mb-6 mt-4 bg-white border border-gray-200 rounded-lg"
+  >
+    <div class="flex items-start space-x-6">
+      <!-- User Avatar and Info -->
+      <div class="flex-shrink-0">
+        <img :src="user.get_avatar" class="w-32 h-32 rounded-full" />
+      </div>
+      <div class="flex-1">
+        <p class="text-xl font-semibold mb-2">
           <strong>{{ user.name }}</strong>
         </p>
-
-        <div class="mt-6 flex space-x-8 justify-around" v-if="user.id">
+        <div class="flex space-x-10 mb-10" v-if="user.id">
           <RouterLink
             :to="{ name: 'friends', params: { id: user.id } }"
-            class="text-xs text-gray-500"
+            class="text-sm text-gray-500"
             >{{ user.friends_count }} Buddies</RouterLink
           >
-          <p class="text-xs text-gray-500">{{ user.posts_count }} posts</p>
+          <p class="text-sm text-gray-500">{{ user.posts_count }} posts</p>
         </div>
 
-        <div class="mt-6">
+        <div class="flex space-x-4">
           <button
-            class="inline-block py-4 px-3 bg-purple-600 text-xs text-white rounded-lg"
+            class="py-2 px-4 bg-purple-600 text-sm text-white rounded-lg"
             @click="sendFriendshipRequest"
             v-if="userStore.user.id !== user.id"
           >
@@ -27,7 +30,7 @@
           </button>
 
           <button
-            class="inline-block mt-4 py-4 px-3 bg-purple-600 text-xs text-white rounded-lg"
+            class="py-2 px-4 bg-purple-600 text-sm text-white rounded-lg"
             @click="sendDirectMessage"
             v-if="userStore.user.id !== user.id"
           >
@@ -35,7 +38,7 @@
           </button>
 
           <RouterLink
-            class="inline-block mr-2 py-4 px-3 bg-purple-600 text-xs text-white rounded-lg"
+            class="py-2 px-4 bg-purple-600 text-sm text-white rounded-lg"
             to="/profile/edit"
             v-if="userStore.user.id === user.id"
           >
@@ -43,192 +46,114 @@
           </RouterLink>
 
           <button
-            class="inline-block py-4 px-3 bg-red-600 text-xs text-white rounded-lg"
+            class="py-2 px-4 bg-red-600 text-sm text-white rounded-lg"
             @click="logout"
             v-if="userStore.user.id === user.id"
           >
             Log out
           </button>
+
+          <RouterLink
+            to="/feedform"
+            class="py-2 px-4 bg-green-500 text-sm text-white rounded-lg"
+          >
+            Create Ad
+          </RouterLink>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="main-center col-span-2 space-y-4">
-      <div
-        class="bg-white border border-gray-200 rounded-lg shadow-md p-6"
-        v-if="userStore.user.id === user.id"
-      >
-        <form v-on:submit.prevent="submitForm" method="post">
-          <!-- Section: Basic Information -->
-          <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">
-              Basic Information
-            </h2>
-            <input
-              v-model="title"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              placeholder="Title (e.g., Golden Retriever Puppy for Sale)"
-            />
-            <textarea
-              v-model="description"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              rows="4"
-              placeholder="Description (Provide details about the pet)"
-            ></textarea>
-          </div>
+  <div class="max-w-9xl mx-auto p-6 mb-10 bg-white rounded shadow-md">
+    <h1 class="text-2xl font-bold mb-4">Posts</h1>
+    <div v-if="posts.length">
+      <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+        <thead>
+          <tr class="w-full bg-gray-100 border-b border-gray-200">
+            <th class="px-6 py-3 text-left text-gray-600 font-medium">S.NO</th>
+            <th class="px-6 py-3 text-left text-gray-600 font-medium">Ad Id</th>
+            <th class="px-6 py-3 text-left text-gray-600 font-medium">Image</th>
+            <th class="px-6 py-3 text-left text-gray-600 font-medium">Title</th>
+            <th class="px-6 py-3 text-left text-gray-600 font-medium">
+              Description
+            </th>
+            <th class="px-6 py-3 text-left text-gray-600 font-medium">
+              Published
+            </th>
+            <th class="px-6 py-3 text-left text-gray-600 font-medium">
+              Interests
+            </th>
+            <th class="px-6 py-3 text-left text-gray-600 font-medium">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(post, index) in posts"
+            :key="post.id"
+            class="border-b border-gray-200"
+          >
+            <td class="px-6 py-4 text-gray-500">{{ index + 1 }}</td>
+            <td class="px-6 py-4 text-gray-800">{{ post.id.slice(-4) }}</td>
+            <td class="px-5 py-4 text-gray-500">
+              <div class="flex flex-wrap gap-2">
+                <router-link
+                  v-for="image in post.attachments"
+                  :key="image.id"
+                  :to="`/${post.id}/`"
+                  class="block"
+                >
+                  <img
+                    :src="image.get_image"
+                    class="w-32 h-32 object-cover rounded-lg cursor-pointer"
+                  />
+                </router-link>
+              </div>
+            </td>
 
-          <!-- Section: Contact & Price -->
-          <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">
-              Contact & Price
-            </h2>
-            <input
-              v-model="contact_information"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              placeholder="Contact Information (e.g., Phone, Email)"
-            />
-            <input
-              v-model="price"
-              type="number"
-              step="0.01"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              placeholder="Price (in USD)"
-            />
-          </div>
-
-          <!-- Section: Pet Details -->
-          <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">
-              Pet Details
-            </h2>
-            <input
-              v-model="category"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              placeholder="Category (e.g., Dog, Cat)"
-            />
-            <input
-              v-model="breed"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              placeholder="Breed (e.g., Labrador, Persian)"
-            />
-            <input
-              v-model="color"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              placeholder="Color (e.g., Brown, White)"
-            />
-            <input
-              v-model="age"
-              type="number"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              placeholder="Age (in months)"
-            />
-          </div>
-
-          <!-- Section: Additional Information -->
-          <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">
-              Additional Information
-            </h2>
-            <h3>Vaccinated</h3>
-            <select
-              v-model="vaccinated"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-            >
-              <option value="true">Vaccinated</option>
-              <option value="false">Not Vaccinated</option>
-            </select>
-            <h3>Gender</h3>
-            <select
-              v-model="gender"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-            >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-            <h3>Weight</h3>
-            <input
-              v-model="weight"
-              type="number"
-              step="0.01"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              placeholder="Weight (in kg)"
-            />
-            <h3>Microchipped</h3>
-            <select
-              v-model="microchipped"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-            >
-              <option value="true">Microchipped</option>
-              <option value="false">Not Microchipped</option>
-            </select>
-            <h3>Training</h3>
-            <select
-              v-model="trained"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-            >
-              <option value="true">Trained</option>
-              <option value="false">Not Trained</option>
-            </select>
-            <h3>Health Certificate</h3>
-            <select
-              v-model="health_certificate"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-            >
-              <option value="true">Health Certificate Available</option>
-              <option value="false">No Health Certificate</option>
-            </select>
-            <textarea
-              v-model="body"
-              class="p-4 w-full bg-gray-100 rounded-lg mb-4"
-              rows="3"
-              placeholder="Add a personal message or additional details"
-            ></textarea>
-          </div>
-
-          <!-- Image Preview and Upload -->
-          <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">
-              Image Upload
-            </h2>
-            <div id="preview" v-if="url" class="mb-4">
-              <img
-                :src="url"
-                class="w-32 h-32 object-cover mt-3 rounded-lg shadow-sm"
-              />
-            </div>
-            <label
-              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg cursor-pointer"
-            >
-              <input
-                type="file"
-                ref="file"
-                @change="onFileChange"
-                class="hidden"
-              />
-              Attach image
-            </label>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="border-t border-gray-100 pt-4 flex justify-end">
-            <button
-              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-            >
-              Post
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div
-        class="p-4 bg-white border border-gray-200 rounded-lg"
-        v-for="post in posts"
-        v-bind:key="post.id"
-      >
-        <FeedItem v-bind:post="post" />
-      </div>
+            <td class="px-6 py-4 text-gray-800">{{ post.title }}</td>
+            <td class="px-6 py-4 text-gray-600">{{ post.description }}</td>
+            <td class="px-6 py-4 text-gray-500">
+              {{ post.created_at_formatted }} Ago
+            </td>
+            <td class="px-6 py-4 text-gray-500">
+              {{ post.likes_count }} Likes, {{ post.comments_count }} Comments
+            </td>
+            <td class="px-6 py-4 text-gray-500">
+              <div class="flex items-center space-x-2">
+                <button
+                  @click="editPost(post.id)"
+                  class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+                  v-if="userStore.user.id === post.created_by.id"
+                >
+                  Edit
+                </button>
+                <button
+                  @click="deletePost(post.id)"
+                  class="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600"
+                  v-if="userStore.user.id === post.created_by.id"
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>
+      <p class="text-gray-700">No posts available.</p>
     </div>
   </div>
+
+  <!-- <div
+  class="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+  v-for="post in posts"
+  v-bind:key="post.id"
+>
+  <FeedItem v-bind:post="post" />
+</div> -->
 </template>
 
 <script>
@@ -237,6 +162,7 @@ import FeedItem from "../components/FeedItem.vue";
 import { useUserStore } from "@/stores/user";
 import { useToastStore } from "@/stores/toast";
 import { RouterLink } from "vue-router";
+import FeedForm from "./FeedForm.vue";
 
 export default {
   name: "FeedView",
@@ -253,6 +179,7 @@ export default {
 
   components: {
     FeedItem,
+    FeedForm,
   },
 
   data() {
@@ -346,6 +273,29 @@ export default {
         });
     },
 
+    deletePost(postId) {
+      this.$emit("deletePost", postId);
+
+      axios
+        .delete(`/api/posts/${postId}/delete/`)
+        .then((response) => {
+          console.log(response.data);
+
+          this.toastStore.showToast(5000, "The post was deleted", "bg-red-500");
+          // Optionally, you might want to remove the post from the view
+          // this.posts = this.posts.filter(post => post.id !== postId);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    },
+
+    editPost(postId) {
+      console.log("Redirecting to edit page for post ID:", postId);
+      this.$router.push(`/${postId}/edit/`).catch((err) => {
+        console.error("Navigation error:", err);
+      });
+    },
     submitForm() {
       let formData = new FormData();
       formData.append("image", this.$refs.file.files[0]);
