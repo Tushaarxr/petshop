@@ -1,186 +1,127 @@
 <template>
-  <div class="max-w-4xl mx-auto mt-10 bg-white shadow-md rounded p-6">
-    <h2 class="text-2xl font-bold mb-6">Edit Post</h2>
-    <form @submit.prevent="updatePost">
-      <!-- Title -->
-      <div class="mb-4">
-        <label for="title" class="block text-sm font-medium text-gray-700"
-          >Title</label
-        >
-        <input
-          v-model="post.title"
-          type="text"
-          id="title"
-          class="mt-1 block w-full border-gray-300 rounded-md"
-          required
-        />
-      </div>
+  <div class="main-center col-span-2 space-y-4">
+    <div class="bg-white border border-gray-200 rounded-lg shadow-md p-6">
+      <form @submit.prevent="updatePost" method="post">
+        <!-- Section: Basic Information -->
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-700">Basic Information</h2>
+          <h3>Title</h3>
+          <input
+            v-model="post.title"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            placeholder="Title (e.g., Golden Retriever Puppy for Sale)"
+          />
+          <h3>Description</h3>
+          <textarea
+            v-model="post.description"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            rows="4"
+            placeholder="Description (Provide details about the pet)"
+          ></textarea>
+        </div>
 
-      <!-- Description -->
-      <div class="mb-4">
-        <label for="description" class="block text-sm font-medium text-gray-700"
-          >Description</label
-        >
-        <textarea
-          v-model="post.description"
-          id="description"
-          class="mt-1 block w-full border-gray-300 rounded-md"
-        ></textarea>
-      </div>
+        <!-- Section: Contact & Price -->
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-700">Contact & Price</h2>
+          <h3>Contact</h3>
+          <input
+            v-model="post.contact_information"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            placeholder="Contact Information (e.g., Phone, Email)"
+          />
+          <h3>Price</h3>
+          <input
+            v-model="post.price"
+            type="number"
+            step="0.01"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            placeholder="Price (in USD)"
+          />
+        </div>
 
-      <!-- Contact Information -->
-      <div class="mb-4">
-        <label
-          for="contact_information"
-          class="block text-sm font-medium text-gray-700"
-          >Contact Information</label
-        >
-        <textarea
-          v-model="post.contact_information"
-          id="contact_information"
-          class="mt-1 block w-full border-gray-300 rounded-md"
-        ></textarea>
-      </div>
-
-      <!-- Price -->
-      <div class="mb-4">
-        <label for="price" class="block text-sm font-medium text-gray-700"
-          >Price</label
-        >
-        <input
-          v-model="post.price"
-          type="number"
-          step="0.01"
-          id="price"
-          class="mt-1 block w-full border-gray-300 rounded-md"
-          required
-        />
-      </div>
-
-      <!-- Category -->
-      <div class="mb-4">
-        <label for="category" class="block text-sm font-medium text-gray-700"
-          >Category</label
-        >
-        <input
-          v-model="post.category"
-          type="text"
-          id="category"
-          class="mt-1 block w-full border-gray-300 rounded-md"
-        />
-      </div>
-
-      <!-- Breed, Color, Age, Gender -->
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="breed" class="block text-sm font-medium text-gray-700"
-            >Breed</label
-          >
+        <!-- Section: Pet Details -->
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-700">Pet Details</h2>
+          <h3>Category</h3>
+          <input
+            v-model="post.category"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            placeholder="Category (e.g., Dog, Cat)"
+          />
+          <h3>Breed</h3>
           <input
             v-model="post.breed"
-            type="text"
-            id="breed"
-            class="mt-1 block w-full border-gray-300 rounded-md"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            placeholder="Breed (e.g., Labrador, Persian)"
           />
-        </div>
-        <div>
-          <label for="color" class="block text-sm font-medium text-gray-700"
-            >Color</label
-          >
+          <h3>Color</h3>
           <input
             v-model="post.color"
-            type="text"
-            id="color"
-            class="mt-1 block w-full border-gray-300 rounded-md"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            placeholder="Color (e.g., Brown, White)"
           />
-        </div>
-        <div>
-          <label for="age" class="block text-sm font-medium text-gray-700"
-            >Age (Months)</label
-          >
+          <h3>Age(In Months)</h3>
           <input
             v-model="post.age"
             type="number"
-            id="age"
-            class="mt-1 block w-full border-gray-300 rounded-md"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            placeholder="Age (in months)"
           />
         </div>
-        <div>
-          <label for="gender" class="block text-sm font-medium text-gray-700"
-            >Gender</label
-          >
-          <select
-            v-model="post.gender"
-            id="gender"
-            class="mt-1 block w-full border-gray-300 rounded-md"
-          >
+
+        <!-- Section: Additional Information -->
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-700">Additional Information</h2>
+          <h3>Vaccinated</h3>
+          <select v-model="post.vaccinated" class="p-4 w-full bg-gray-100 rounded-lg mb-4">
+            <option value="true">Vaccinated</option>
+            <option value="false">Not Vaccinated</option>
+          </select>
+          <h3>Gender</h3>
+          <select v-model="post.gender" class="p-4 w-full bg-gray-100 rounded-lg mb-4">
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
-        </div>
-      </div>
-
-      <!-- Vaccinated, Microchipped, Trained, Health Certificate -->
-      <div class="grid grid-cols-2 gap-4 mt-4">
-        <div>
-          <label
-            for="vaccinated"
-            class="block text-sm font-medium text-gray-700"
-            >Vaccinated</label
-          >
-          <input v-model="post.vaccinated" type="checkbox" id="vaccinated" />
-        </div>
-        <div>
-          <label
-            for="microchipped"
-            class="block text-sm font-medium text-gray-700"
-            >Microchipped</label
-          >
+          <h3>Weight</h3>
           <input
-            v-model="post.microchipped"
-            type="checkbox"
-            id="microchipped"
+            v-model="post.weight"
+            type="number"
+            step="0.01"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            placeholder="Weight (in kg)"
           />
+          <h3>Microchipped</h3>
+          <select v-model="post.microchipped" class="p-4 w-full bg-gray-100 rounded-lg mb-4">
+            <option value="true">Microchipped</option>
+            <option value="false">Not Microchipped</option>
+          </select>
+          <h3>Training</h3>
+          <select v-model="post.trained" class="p-4 w-full bg-gray-100 rounded-lg mb-4">
+            <option value="true">Trained</option>
+            <option value="false">Not Trained</option>
+          </select>
+          <h3>Health Certificate</h3>
+          <select v-model="post.health_certificate" class="p-4 w-full bg-gray-100 rounded-lg mb-4">
+            <option value="true">Health Certificate Available</option>
+            <option value="false">No Health Certificate</option>
+          </select>
+          <h3>Additional Message</h3>
+          <textarea
+            v-model="post.body"
+            class="p-4 w-full bg-gray-100 rounded-lg mb-4"
+            rows="3"
+            placeholder="Add a personal message or additional details"
+          ></textarea>
         </div>
-        <div>
-          <label for="trained" class="block text-sm font-medium text-gray-700"
-            >Trained</label
-          >
-          <input v-model="post.trained" type="checkbox" id="trained" />
-        </div>
-        <div>
-          <label
-            for="health_certificate"
-            class="block text-sm font-medium text-gray-700"
-            >Health Certificate</label
-          >
-          <input
-            v-model="post.health_certificate"
-            type="checkbox"
-            id="health_certificate"
-          />
-        </div>
-      </div>
 
-      <!-- Body -->
-      <div class="mt-4">
-        <label for="body" class="block text-sm font-medium text-gray-700"
-          >Additional Information</label
-        >
-        <textarea
-          v-model="post.body"
-          id="body"
-          class="mt-1 block w-full border-gray-300 rounded-md"
-        ></textarea>
-      </div>
-
-      <!-- Submit Button -->
-      <div class="mt-6">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
-          Update Post
-        </button>
-      </div>
-    </form>
+        <!-- Submit Button -->
+        <div class="border-t border-gray-100 pt-4 flex justify-end">
+          <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+            Update Post
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -188,6 +129,7 @@
 import axios from "axios";
 
 export default {
+  name: "EditPost",
   data() {
     return {
       post: {
@@ -199,32 +141,72 @@ export default {
         breed: "",
         color: "",
         age: null,
-        vaccinated: false,
+        vaccinated: "false",
         gender: "",
         weight: null,
-        microchipped: false,
-        trained: false,
-        health_certificate: false,
+        microchipped: "false",
+        trained: "false",
+        health_certificate: "false",
         body: "",
       },
+      errors: [],
     };
   },
   methods: {
-    async fetchPost() {
-      const response = await axios.get(`/api/posts/${this.$route.params.id}/`);
-      this.post = response.data;
-    },
+   async fetchPost() {
+  try {
+    const response = await axios.get(`/api/posts/${this.$route.params.id}/`);
+    const data = response.data.post; // Accessing the post data directly
+    console.log("Fetched post data:", data); // Log fetched data
+
+    this.post = {
+      title: data.title || "",
+      description: data.description || "",
+      contact_information: data.contact_information || "",
+      price: data.price || 0,
+      category: data.category || "",
+      breed: data.breed || "",
+      color: data.color || "",
+      age: data.age || null,
+      vaccinated: data.vaccinated ? "true" : "false",
+      gender: data.gender || "",
+      weight: data.weight || null,
+      microchipped: data.microchipped ? "true" : "false",
+      trained: data.trained ? "true" : "false",
+      health_certificate: data.health_certificate ? "true" : "false",
+      body: data.body || "",
+    };
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    alert("Error fetching post data.");
+  }
+}
+
+,
     async updatePost() {
-      try {
-        const response = await axios.put(
-          `/api/posts/${this.$route.params.id}/edit/`,
-          this.post
-        );
-        alert("Post updated successfully");
-        this.$router.push(`/${this.$route.params.id}`);
-      } catch (error) {
-        console.error(error.response.data);
-        alert("Error updating post");
+      this.errors = [];
+      if (this.post.title === '') this.errors.push('Title is required');
+      if (this.post.description === '') this.errors.push('Description is required');
+      // Add any other validations as needed
+
+      if (this.errors.length === 0) {
+        try {
+          const updatedPost = { ...this.post };
+
+          // Convert string values back to booleans
+          updatedPost.vaccinated = updatedPost.vaccinated === "true";
+          updatedPost.microchipped = updatedPost.microchipped === "true";
+          updatedPost.trained = updatedPost.trained === "true";
+          updatedPost.health_certificate = updatedPost.health_certificate === "true";
+
+          const response = await axios.put(`/api/posts/${this.$route.params.id}/edit/`, updatedPost);
+
+          alert("Post updated successfully");
+          this.$router.push(`/${this.$route.params.id}`);
+        } catch (error) {
+          console.error("Error updating post:", error.response.data);
+          alert("Error updating post");
+        }
       }
     },
   },
@@ -233,3 +215,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* Add any component-specific styles here */
+</style>

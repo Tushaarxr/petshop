@@ -101,7 +101,7 @@
                 <router-link
                   v-for="image in post.attachments"
                   :key="image.id"
-                  :to="`/${post.id}/`"
+                  :to="/${post.id}/"
                   class="block"
                 >
                   <img
@@ -262,33 +262,43 @@ export default {
     },
 
     getFeed() {
-      axios
-        .get(`/api/posts/profile/${this.$route.params.id}/`)
-        .then((response) => {
-          this.posts = response.data.posts;
-          this.user = response.data.user;
-        })
-        .catch((error) => {
-          console.error("error", error);
-        });
-    },
+  axios
+    .get(`/api/posts/profile/${this.$route.params.id}/`)
+    .then((response) => {
+      this.posts = response.data.posts;
+      this.user = response.data.user;
 
-    deletePost(postId) {
-      this.$emit("deletePost", postId);
+      
+      this.user.posts_count = this.posts.length;
+    })
+    .catch((error) => {
+      console.error("error", error);
+    });
+}
 
-      axios
-        .delete(`/api/posts/${postId}/delete/`)
-        .then((response) => {
-          console.log(response.data);
+,
 
-          this.toastStore.showToast(5000, "The post was deleted", "bg-red-500");
-          // Optionally, you might want to remove the post from the view
-          // this.posts = this.posts.filter(post => post.id !== postId);
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    },
+deletePost(postId) {
+  this.$emit("deletePost", postId);
+
+  axios
+    .delete(`/api/posts/${postId}/delete/`)
+    .then((response) => {
+      console.log(response.data);
+
+      
+      this.getFeed();
+
+      
+      this.toastStore.showToast(5000, "The post was deleted", "bg-red-500");
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+}
+
+
+,
 
     editPost(postId) {
       console.log("Redirecting to edit page for post ID:", postId);

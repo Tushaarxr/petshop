@@ -8,6 +8,16 @@
         <FeedDetail v-bind:post="post" />
       </div>
 
+      <div>
+        <button
+          class="py-2 px-4 bg-purple-600 text-sm text-white rounded-lg"
+          @click="sendDirectMessage"
+          
+        >
+          Send direct message
+        </button>
+      </div>
+
       <div
         class="p-4 ml-6 bg-white border border-gray-200 rounded-lg"
         v-for="comment in post.comments"
@@ -15,6 +25,8 @@
       >
         <CommentItem v-bind:comment="comment" />
       </div>
+
+ 
 
       <div class="bg-white border border-gray-200 rounded-lg">
         <form v-on:submit.prevent="submitForm" method="post">
@@ -44,12 +56,23 @@ import axios from "axios";
 
 import CommentItem from "../components/CommentItem.vue";
 import FeedDetail from "../components/FeedDetail.vue";
+import { useUserStore } from "@/stores/user";
+import { useToastStore } from "@/stores/toast";
 
 export default {
   name: "PostView",
 
+  setup() {
+    const userStore = useUserStore();
+    const toastStore = useToastStore();
+
+    return {
+      userStore,
+      toastStore,
+    };
+  },
+
   components: {
-    // FeedItem,
     CommentItem,
     FeedDetail,
   },
@@ -59,6 +82,8 @@ export default {
       post: {
         id: null,
         comments: [],
+        postCreatorId: null, // Store post creator's ID here
+        body: "",
       },
       body: "",
     };
@@ -74,12 +99,25 @@ export default {
         .get(`/api/posts/${this.$route.params.id}/`)
         .then((response) => {
           this.post = response.data.post;
+          this.postCreatorId = response.data.user.id;
         })
         .catch((error) => {
           console.error(
             "Error fetching post:",
             error.response ? error.response.data : error.message
           );
+        });
+    },
+
+    sendDirectMessage() {
+      // Use the post creator's user ID instead of the post ID
+      axios
+        .get(`/api/chat/${this.post.created_by.id}/get-or-create/`) // Pass creator's user ID
+        .then((response) => {
+          this.$router.push("/chat");
+        })
+        .catch((error) => {
+          console.error("Error creating chat:", error);
         });
     },
 

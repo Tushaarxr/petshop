@@ -13,21 +13,15 @@ from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
 
 @api_view(['GET'])
 def post_list(request):
-    user_ids = [request.user.id]
+    # Fetch all posts without any filters
+    posts = Post.objects.all()
 
-    for user in request.user.friends.all():
-        user_ids.append(user.id)
-
-    posts = Post.objects.filter(created_by_id__in=list(user_ids))
-
-    trend = request.GET.get('trend', '')
-
-    if trend:
-        posts = posts.filter(body__icontains='#' + trend).filter(is_private=False)
-
+    # Serialize the posts
     serializer = PostSerializer(posts, many=True)
 
+    # Return the serialized data
     return JsonResponse(serializer.data, safe=False)
+
 
 
 @api_view(['GET'])
@@ -233,7 +227,6 @@ def bookmarked_posts(request):
     serializer = PostSerializer(posts, many=True)
     return JsonResponse(serializer.data, safe=False)
 
-
 @api_view(['PUT'])
 def post_edit(request, pk):
     print(f"Request user: {request.user}")
@@ -254,10 +247,9 @@ def post_edit(request, pk):
         post.attachments.add(attachment)
 
     if form.is_valid():
-        post = form.save(commit=False)
-        post.save()
-
+        post = form.save()  # This should be the correct way to save the updated post.
         serializer = PostSerializer(post)
         return Response(serializer.data)
     else:
+        print(f"Form errors: {form.errors}")  # Debugging line
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
