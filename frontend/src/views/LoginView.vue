@@ -5,8 +5,7 @@
                 <h1 class="mb-6 text-2xl">Log in</h1>
 
                 <p class="mb-6 text-gray-500">
-                    Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate.
-                    Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate.
+                    Welcome to Petify, your go-to platform for buying and selling pets. Log in to connect with fellow pet lovers!
                 </p>
 
                 <p class="font-bold">

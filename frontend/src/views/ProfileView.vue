@@ -101,7 +101,7 @@
                 <router-link
                   v-for="image in post.attachments"
                   :key="image.id"
-                  :to="/${post.id}/"
+                  :to="`/${post.id}/`"
                   class="block"
                 >
                   <img
@@ -146,14 +146,6 @@
       <p class="text-gray-700">No posts available.</p>
     </div>
   </div>
-
-  <!-- <div
-  class="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
-  v-for="post in posts"
-  v-bind:key="post.id"
->
-  <FeedItem v-bind:post="post" />
-</div> -->
 </template>
 
 <script>
@@ -262,43 +254,40 @@ export default {
     },
 
     getFeed() {
-  axios
-    .get(`/api/posts/profile/${this.$route.params.id}/`)
-    .then((response) => {
-      this.posts = response.data.posts;
-      this.user = response.data.user;
+      axios
+        .get(`/api/posts/profile/${this.$route.params.id}/`)
+        .then((response) => {
+          this.posts = response.data.posts;
+          this.user = response.data.user;
 
-      
-      this.user.posts_count = this.posts.length;
-    })
-    .catch((error) => {
-      console.error("error", error);
-    });
-}
+          this.user.posts_count = this.posts.length;
+        })
+        .catch((error) => {
+          console.error("error", error);
+        });
+    },
 
-,
+    deletePost(postId) {
+      this.$emit("deletePost", postId);
 
-deletePost(postId) {
-  this.$emit("deletePost", postId);
+      axios
+        .delete(`/api/posts/${postId}/delete/`)
+        .then((response) => {
+          console.log(response.data);
 
-  axios
-    .delete(`/api/posts/${postId}/delete/`)
-    .then((response) => {
-      console.log(response.data);
+          // Refresh the feed
+          this.getFeed();
 
-      
-      this.getFeed();
+          // Show a toast message
+          this.toastStore.showToast(5000, "The post was deleted", "bg-red-500");
 
-      
-      this.toastStore.showToast(5000, "The post was deleted", "bg-red-500");
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
-}
-
-
-,
+          // Refresh the profile page
+          window.location.reload(); // This will refresh the current page to reflect changes
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    },
 
     editPost(postId) {
       console.log("Redirecting to edit page for post ID:", postId);

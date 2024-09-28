@@ -5,8 +5,7 @@
                 <h1 class="mb-6 text-2xl">Edit profile</h1>
 
                 <p class="mb-6 text-gray-500">
-                    Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate.
-                    Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate.
+                    Update your profile details here, including your name, email, and avatar picture.
                 </p>
 
                 <RouterLink to="/profile/edit/password" class="underline">Edit password</RouterLink>
